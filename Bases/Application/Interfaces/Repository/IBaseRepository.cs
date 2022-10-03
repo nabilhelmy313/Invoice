@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-
 namespace Bases.Application
 {
     public interface IBaseRepository<Entity,IdType>
@@ -18,7 +17,5 @@ namespace Bases.Application
         void CreateRange(IEnumerable<Entity> entities);
         void SoftDelete(params IdType[] idList);
         void HardDelete(params IdType[] idList);
-
-
     }
 }

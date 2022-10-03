@@ -1,7 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Persistence;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<InvoiceDbContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("InvoiceConnStr")));
+
 
 var app = builder.Build();
 
