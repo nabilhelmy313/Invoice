@@ -3,6 +3,76 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Invoice </h1>
+    <div class="container">
+        <div class="row">
+            <div class="form-group col-md-6 my-2">
+                <input  class="form-control" placeholder="Invoice Num" disabled>
+            </div>
+            <div class="form-group col-md-6 my-2">
+                <input type="date" class="form-control">
+            </div>
+            <div class="form-group col-md-6 my-2">
+                <input type="text" class="form-control" placeholder="Customer Name">
+            </div>
+            <div class="form-group col-md-2 my-2">
+                <label for="exampleInputPassword1">Payment Method</label>
+            </div>
+            <div class="form-group col-md-2 my-2">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="Radio" value="Cash" checked>
+                <label class="form-check-label" for="Radio">Cash</label>
+
+            </div>
+            <div class="form-group col-md-2 my-2">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="Radio2" value="Credit">
+                <label class="form-check-label" for="Radio2">Credit</label>
+
+            </div>
+
+            <div class="form-group col-md-12 my-2">
+                <textarea type="date" class="form-control" rows="3" placeholder="Description"></textarea>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 my-2">
+                <button class="btn btn-secondary d-grid">Add New Row +</button>
+            </div>
+        </div>
+        <div class="row">
+            <table class="table table-success table-striped" id="cart">
+                <thead>
+                    <tr>
+                        <th scope="col">Item Code</th>
+                        <th scope="col">Item Name</th>
+                        <th scope="col">QTY</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">
+                            <input class=form-control disabled />
+                        </th>
+                        <td>
+                            <input class=form-control  />
+                        </td>
+                        <td>
+                            <input class=form-control type="number"/>
+
+                        </td>
+                        <td>
+                            <input class=form-control />
+                        </td>
+                        <td>
+                            <input class=form-control />
+                        </td>
+                    </tr>
+                   
+                </tbody>
+            </table>
+        </div>
+
+    </div>
 </div>
