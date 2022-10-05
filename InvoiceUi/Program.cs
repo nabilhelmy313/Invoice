@@ -1,6 +1,11 @@
+using Application.Interfaces;
+using Application.Interfaces.Repositories;
+using Application.Interfaces.Services;
+using Application.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Persistence;
+using Persistence.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +14,15 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<InvoiceDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("InvoiceConnStr")));
 
+#region Repos
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IInvoiceHDRRepository, InvoiceHDRRepository>();
+builder.Services.AddScoped<IItemDTLRepository, ItemDTLRepository>();
+#endregion
+#region Services
+builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 
+#endregion
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

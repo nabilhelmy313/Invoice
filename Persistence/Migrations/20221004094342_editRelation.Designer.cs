@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -11,9 +12,10 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(InvoiceDbContext))]
-    partial class InvoiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221004094342_editRelation")]
+    partial class editRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,10 +47,15 @@ namespace Persistence.Migrations
                     b.Property<bool>("Is_Deleted")
                         .HasColumnType("bit");
 
+                    b.Property<int>("ItemsDTLId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("PaymentMethod")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ItemsDTLId");
 
                     b.ToTable("InvoiceHDRs");
                 });
@@ -61,7 +68,7 @@ namespace Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("InvoiceHDRId")
+                    b.Property<int>("InvoiceId")
                         .HasColumnType("int");
 
                     b.Property<bool>("Is_Deleted")
@@ -80,25 +87,23 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InvoiceHDRId");
-
                     b.ToTable("ItemsDTLs");
-                });
-
-            modelBuilder.Entity("Domain.Entites.ItemsDTL", b =>
-                {
-                    b.HasOne("Domain.Entites.InvoiceHDR", "InvoiceHDR")
-                        .WithMany("ItemsDTL")
-                        .HasForeignKey("InvoiceHDRId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("InvoiceHDR");
                 });
 
             modelBuilder.Entity("Domain.Entites.InvoiceHDR", b =>
                 {
+                    b.HasOne("Domain.Entites.ItemsDTL", "ItemsDTL")
+                        .WithMany("InvoiceHDRs")
+                        .HasForeignKey("ItemsDTLId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("ItemsDTL");
+                });
+
+            modelBuilder.Entity("Domain.Entites.ItemsDTL", b =>
+                {
+                    b.Navigation("InvoiceHDRs");
                 });
 #pragma warning restore 612, 618
         }

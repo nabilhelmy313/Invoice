@@ -21,7 +21,8 @@ namespace Bases.Infrastructure
         }
         public void Create(Entity entity)
         {
-            _dbContext.Add(entity);
+            _dbContext.Attach(entity);
+            _dbContext.Entry(entity).State = EntityState.Added;
         }
 
         public void CreateRange(IEnumerable<Entity> entities)

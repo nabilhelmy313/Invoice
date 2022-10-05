@@ -5,10 +5,10 @@ namespace Domain.Entites
 {
     public class ItemsDTL:BaseEntity<int>
     {
-        public int InvoiceId { get; set; }
+        public int InvoiceHDRId { get; set; }
         public string ItemName { get; set; }=string.Empty;  
         public int Qty { get; set; }
         public decimal Price{ get; set; }
-        public virtual ICollection<InvoiceHDR> InvoiceHDRs  { get; set; }
+        public virtual InvoiceHDR InvoiceHDR  { get; set; }
     }
 }

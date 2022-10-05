@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Persistence.Repositories
 {
-    public class InvoiceHDRRepository:BaseRepostiory<InvoiceHDR,InvoiceDbContext,int>,IInvoiceHDRRepository
+    public class InvoiceHDRRepository:BaseRepostiory<InvoiceHDR,int,InvoiceDbContext>,IInvoiceHDRRepository
     {
         public InvoiceHDRRepository(InvoiceDbContext dbContext) : base(dbContext)
         {

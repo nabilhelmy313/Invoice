@@ -1,78 +1,121 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
+@model Domain.Dtos.InvoiceDto
 <div class="text-center">
     <h1 class="display-4">Invoice </h1>
     <div class="container">
-        <div class="row">
-            <div class="form-group col-md-6 my-2">
-                <input  class="form-control" placeholder="Invoice Num" disabled>
-            </div>
-            <div class="form-group col-md-6 my-2">
-                <input type="date" class="form-control">
-            </div>
-            <div class="form-group col-md-6 my-2">
-                <input type="text" class="form-control" placeholder="Customer Name">
-            </div>
-            <div class="form-group col-md-2 my-2">
-                <label for="exampleInputPassword1">Payment Method</label>
-            </div>
-            <div class="form-group col-md-2 my-2">
-                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="Radio" value="Cash" checked>
-                <label class="form-check-label" for="Radio">Cash</label>
+        <form asp-action="AddInvoice" >
 
+            <div class="row">
+                <div class="form-group col-md-6 my-2">
+                    <input class="form-control" placeholder="Invoice Num" value="1" asp-for="Id" disabled>
+                </div>
+                <div class="form-group col-md-6 my-2">
+                    <input type="date" asp-for="InvoiceDate" class="form-control">
+                </div>
+                <div class="form-group col-md-6 my-2">
+                    <input  asp-for="Customer" class="form-control" placeholder="Customer Name">
+                </div>
+                <div class="form-group col-md-2 my-2">
+                    <label for="exampleInputPassword1">Payment Method</label>
+                </div>
+                <div class="form-group col-md-2 my-2">
+                    <input class="form-check-input" asp-for="PaymentMethod" type="radio" name="PaymentMethod" id="Radio" value="Cash" checked>
+                    <label class="form-check-label" for="Radio">Cash</label>
+
+                </div>
+
+                <div class="form-group col-md-2 my-2">
+                    <input class="form-check-input" asp-for="PaymentMethod" type="radio" name="PaymentMethod" id="Radio" value="Credit">
+                    <label class="form-check-label" for="Radio">Credit</label>
+
+                </div>
+                <div class="form-group col-md-12 my-2">
+                    <textarea type="date" asp-for="Description" class="form-control" rows="3" placeholder="Description"></textarea>
+                </div>
             </div>
-            <div class="form-group col-md-2 my-2">
-                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="Radio2" value="Credit">
-                <label class="form-check-label" for="Radio2">Credit</label>
 
+            <div class="row">
+                <div class="col-md-3 my-2">
+                    <button class="btn btn-secondary d-grid" id="addRow" type="button">Add New Row +</button>
+                    <button id="ad">jknn</button>
+                </div>
             </div>
+            <div class="row">
+                <table class="table table-success table-striped" id="cart">
+                    <thead>
+                        <tr>
+                            <th scope="col">Item Code</th>
+                            <th scope="col">Item Name</th>
+                            <th scope="col">QTY</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model!.ItemDtos!.Count; i++)
+                        {
+                            <tr>
+                                <td scope="row">
+                                    <input class=form-control disabled value="@(i+1)" />
+                                </td>
+                                <td>
+                                    <input class=form-control asp-for="ItemDtos[i].ItemName" name="ItemDtos[i].ItemName" />
+                                </td>
+                                <td>
+                                    <input class=form-control type="number" asp-for="ItemDtos[i].Qty" name="ItemDtos[i].Qty" />
 
-            <div class="form-group col-md-12 my-2">
-                <textarea type="date" class="form-control" rows="3" placeholder="Description"></textarea>
+                                </td>
+                                <td>
+                                    <input class=form-control asp-for="ItemDtos[i].Price" name="ItemDtos[i].Price" />
+                                </td>
+                                <td>
+                                    <input class=form-control value="@(Model.ItemDtos[i].Price*Model.ItemDtos[i].Qty)"/>
+                                </td>
+                            </tr>
+                        }
+                    
+
+                    </tbody>
+                </table>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-3 my-2">
-                <button class="btn btn-secondary d-grid">Add New Row +</button>
-            </div>
-        </div>
-        <div class="row">
-            <table class="table table-success table-striped" id="cart">
-                <thead>
-                    <tr>
-                        <th scope="col">Item Code</th>
-                        <th scope="col">Item Name</th>
-                        <th scope="col">QTY</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">
-                            <input class=form-control disabled />
-                        </th>
-                        <td>
-                            <input class=form-control  />
-                        </td>
-                        <td>
-                            <input class=form-control type="number"/>
-
-                        </td>
-                        <td>
-                            <input class=form-control />
-                        </td>
-                        <td>
-                            <input class=form-control />
-                        </td>
-                    </tr>
-                   
-                </tbody>
-            </table>
-        </div>
-
+            <button class="btn btn-primary" type="submit" asp-action="AddInvoice">Save</button>
+         </form>
     </div>
 </div>
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // your code goes here
+           
+            $("#addRow").click(function () {
+                let i = $('#cart tr').length-1;
+                const rowTable=
+                        `<tr>
+                            <td scope="row">
+                                <input class=form-control disabled value="${i}" />
+                            </td>
+                            <td>
+                                <input class=form-control  name="ItemDtos[${i}].ItemName" />
+                            </td>
+                            <td>
+                                <input class=form-control type="number" name="ItemDtos[${i}].Qty" />
+
+                            </td>
+                            <td>
+                                <input class=form-control  name="ItemDtos[${i}].Price" />
+                            </td>
+                            <td>
+                                <input class=form-control value="5"  />
+                            </td>
+                        </tr>`;
+
+                
+                $('#cart').append(rowTable);
+                console.log(i);
+
+            });
+        });
+    </script>
+}
