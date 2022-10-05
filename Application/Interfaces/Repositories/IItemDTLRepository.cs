@@ -10,5 +10,6 @@ namespace Application.Interfaces.Repositories
 {
     public interface IItemDTLRepository:IBaseRepository<ItemsDTL,int>
     {
+        Task<bool> DeleteItemsInInvoice(int invoiceId);
     }
 }

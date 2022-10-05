@@ -16,9 +16,12 @@ namespace Persistence.Repositories
         {
 
         }
-        public async Task<bool> DeleteItemsInInvoice()
+        public async Task<bool> DeleteItemsInInvoice(int invoiceId)
         {
-            _dbcontext
+            var items=await _dbContext.ItemsDTLs.Where(a=>a.Id == invoiceId).ToListAsync();
+            var ids = items.Select(a => a.Id).ToArray();
+            SoftDelete(ids);
+            return true;
         }
     }
 }

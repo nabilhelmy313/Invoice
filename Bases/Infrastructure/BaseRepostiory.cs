@@ -10,7 +10,7 @@ namespace Bases.Infrastructure
                                                                 where Entity : BaseEntity<IdType>
                                                                 where TDbContext : DbContext
     {
-        private readonly TDbContext _dbContext;
+        protected readonly TDbContext _dbContext;
         private static bool _hasIsDeleted = typeof(Entity).GetType() is BaseCommonEntity<IdType>;
         private readonly Expression<Func<Entity, bool>> ignoreDeleted =
             z => _hasIsDeleted ? z.Is_Deleted == false : true;

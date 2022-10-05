@@ -5,17 +5,18 @@
 <div class="text-center">
     <h1 class="display-4">Invoice </h1>
     <div class="container">
-        <form asp-action="AddInvoice" >
+        <form asp-action="AddInvoice">
 
             <div class="row">
                 <div class="form-group col-md-6 my-2">
-                    <input class="form-control" placeholder="Invoice Num" value="1" asp-for="Id" disabled>
+                    <input class="form-control" placeholder="Invoice Num" value="@Model.Id" disabled>
+                    <input hidden asp-for="Id">
                 </div>
                 <div class="form-group col-md-6 my-2">
                     <input type="date" asp-for="InvoiceDate" class="form-control">
                 </div>
                 <div class="form-group col-md-6 my-2">
-                    <input  asp-for="Customer" class="form-control" placeholder="Customer Name">
+                    <input asp-for="Customer" class="form-control" placeholder="Customer Name">
                 </div>
                 <div class="form-group col-md-2 my-2">
                     <label for="exampleInputPassword1">Payment Method</label>
@@ -39,7 +40,12 @@
             <div class="row">
                 <div class="col-md-3 my-2">
                     <button class="btn btn-secondary d-grid" id="addRow" type="button">Add New Row +</button>
-                    <button id="ad">jknn</button>
+                </div>
+                <div class="col-md-1 my-2">
+                    <label>Total</label>
+                </div>
+                <div class="col-md-3 my-2">
+                    <input class="form-control d-grid" value="@ViewBag.Total" type="button" disabled />
                 </div>
             </div>
             <div class="row">
@@ -57,65 +63,83 @@
                         @for (int i = 0; i < Model!.ItemDtos!.Count; i++)
                         {
                             <tr>
+                                <input hidden asp-for="ItemDtos[i].Id" name="ItemDtos[@i].Id">
+                                <input hidden asp-for="ItemDtos[i].InvoiceId" name="ItemDtos[@i].InvoiceId">
                                 <td scope="row">
-                                    <input class=form-control disabled value="@(i+1)" />
+                                    <input class="form-control" disabled value="@(i+1)" />
                                 </td>
                                 <td>
-                                    <input class=form-control asp-for="ItemDtos[i].ItemName" name="ItemDtos[i].ItemName" />
+                                    <input class="form-control" asp-for="ItemDtos[i].ItemName" name="ItemDtos[@i].ItemName" />
                                 </td>
                                 <td>
-                                    <input class=form-control type="number" asp-for="ItemDtos[i].Qty" name="ItemDtos[i].Qty" />
+                                    <input class="form-control" type="number" asp-for="ItemDtos[i].Qty" name="ItemDtos[@i].Qty" />
 
                                 </td>
                                 <td>
-                                    <input class=form-control asp-for="ItemDtos[i].Price" name="ItemDtos[i].Price" />
+                                    <input class="form-control" asp-for="ItemDtos[i].Price" name="ItemDtos[@i].Price" />
                                 </td>
                                 <td>
-                                    <input class=form-control value="@(Model.ItemDtos[i].Price*Model.ItemDtos[i].Qty)"/>
+                                    <input class="form-control" value="@(Model.ItemDtos[i].Price*Model.ItemDtos[i].Qty)" disabled />
                                 </td>
                             </tr>
                         }
-                    
+
 
                     </tbody>
                 </table>
             </div>
+
             <button class="btn btn-primary" type="submit" asp-action="AddInvoice">Save</button>
-         </form>
+
+        </form>
+        <form asp-action="DeleteInvoice" method="post">
+            <input asp-for="Id" hidden name="invoiceId" />
+            <button class="btn btn-danger" type="submit" asp-action="DeleteInvoice">Delete Invoice</button>
+        </form>
+        <form asp-action="DeleteInvoice" method="post">
+            <input asp-for="Id" hidden name="invoiceId" />
+            <button class="btn btn-success" type="submit" asp-action="NewInvoice">new Invoice</button>
+        </form>
     </div>
 </div>
 @section scripts{
     <script type="text/javascript">
         $(document).ready(function () {
             // your code goes here
-           
+
             $("#addRow").click(function () {
-                let i = $('#cart tr').length-1;
-                const rowTable=
-                        `<tr>
-                            <td scope="row">
-                                <input class=form-control disabled value="${i}" />
-                            </td>
-                            <td>
-                                <input class=form-control  name="ItemDtos[${i}].ItemName" />
-                            </td>
-                            <td>
-                                <input class=form-control type="number" name="ItemDtos[${i}].Qty" />
+                let i = $('#cart tr').length - 1;
+                const rowTable =
+                    `<tr>
+                                    <td scope="row">
+                                        <input class=form-control disabled value="${i + 1}" />
+                                    </td>
+                                    <td>
+                                        <input class=form-control  name="ItemDtos[${i}].ItemName"  />
+                                    </td>
+                                    <td>
+                                        <input class=form-control type="number" name="ItemDtos[${i}].Qty" id="qty${i}" />
 
-                            </td>
-                            <td>
-                                <input class=form-control  name="ItemDtos[${i}].Price" />
-                            </td>
-                            <td>
-                                <input class=form-control value="5"  />
-                            </td>
-                        </tr>`;
+                                    </td>
+                                    <td>
+                                                <input class=form-control  name="ItemDtos[${i}].Price" id="price${i}"/>
+                                    </td>
+                                    <td>
+                                        <input class=form-control disabled id="total${i}" />
+                                    </td>
+                                </tr>`;
 
-                
+
+
+                let price = parseFloat($("#price" + (i - 1)).val());
+                let qty = parseFloat($("#qty" + (i - 1)).val());
+                $("#total" + parseInt(i - 1)).val(qty * price);
                 $('#cart').append(rowTable);
-                console.log(i);
+                console.log(i, total, "#price" + i - 1);
 
             });
+
+
         });
     </script>
 }

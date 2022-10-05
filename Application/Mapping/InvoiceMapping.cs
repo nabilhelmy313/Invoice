@@ -14,8 +14,9 @@ namespace Application.Mapping
         public static InvoiceHDR Convert(InvoiceDto invoiceDto)
         {
             InvoiceHDR invoiceHDR = new InvoiceHDR();
+            invoiceHDR.Id = invoiceDto.Id;
             invoiceHDR.Customer = invoiceDto.Customer;
-            invoiceHDR.PaymentMethod = invoiceDto.PaymentMethod==PaymentMethods.Cash.ToString()?true:false;
+            invoiceHDR.PaymentMethod = invoiceDto.PaymentMethod == PaymentMethods.Cash.ToString() ? true : false;
             invoiceHDR.InvoiceDate = invoiceDto.InvoiceDate;
             invoiceHDR.Description = invoiceDto.Description;
             return invoiceHDR;
@@ -33,7 +34,30 @@ namespace Application.Mapping
         {
             List<ItemsDTL> itemsDTL = new List<ItemsDTL>();
             itemsDTL.AddRange(itemDtos.Select(a => Convert(a)));
-            return itemsDTL; 
+            return itemsDTL;
+        }
+        public static InvoiceDto Convert(InvoiceHDR invoiceHDR)
+        {
+            if (invoiceHDR is null) return null;
+            InvoiceDto InvoiceDto = new();
+            List<ItemDto> itemDtos = new();
+            InvoiceDto.Id = invoiceHDR.Id;
+            InvoiceDto.Customer = invoiceHDR.Customer;
+            InvoiceDto.PaymentMethod = invoiceHDR.PaymentMethod == true ? PaymentMethods.Cash.ToString() : PaymentMethods.Credit.ToString();
+            InvoiceDto.InvoiceDate = invoiceHDR.InvoiceDate;
+            InvoiceDto.Description = invoiceHDR.Description;
+            itemDtos.AddRange(invoiceHDR.ItemsDTL!.Select(a => Convert(a)));
+            InvoiceDto.ItemDtos =itemDtos;
+            return InvoiceDto;
+        }
+        public static ItemDto Convert(ItemsDTL itemsDTL)
+        {
+            ItemDto itemDto = new ItemDto();
+            itemDto.ItemName = itemsDTL.ItemName;
+            itemDto.InvoiceId = itemsDTL.InvoiceHDRId;
+            itemDto.Price = itemsDTL.Price;
+            itemDto.Qty = itemsDTL.Qty;
+            return itemDto;
         }
     }
 }

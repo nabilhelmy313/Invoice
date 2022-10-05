@@ -10,5 +10,6 @@ namespace Application.Interfaces.Repositories
 {
     public interface IInvoiceHDRRepository:IBaseRepository<InvoiceHDR,int>
     {
+        public InvoiceHDR GetInvoiceHDRs();
     }
 }
