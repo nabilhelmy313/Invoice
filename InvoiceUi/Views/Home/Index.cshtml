@@ -5,7 +5,7 @@
 <div class="text-center">
     <h1 class="display-4">Invoice </h1>
     <div class="container">
-        <form asp-action="AddInvoice">
+        <form method="post" asp-action="Index" id="invoice">
 
             <div class="row">
                 <div class="form-group col-md-6 my-2">
@@ -14,9 +14,11 @@
                 </div>
                 <div class="form-group col-md-6 my-2">
                     <input type="date" asp-for="InvoiceDate" class="form-control">
+                    <span asp-validation-for="InvoiceDate" class="text-danger"></span>
                 </div>
                 <div class="form-group col-md-6 my-2">
                     <input asp-for="Customer" class="form-control" placeholder="Customer Name">
+                    <span asp-validation-for="Customer" class="text-danger"></span>
                 </div>
                 <div class="form-group col-md-2 my-2">
                     <label for="exampleInputPassword1">Payment Method</label>
@@ -33,7 +35,8 @@
 
                 </div>
                 <div class="form-group col-md-12 my-2">
-                    <textarea type="date" asp-for="Description" class="form-control" rows="3" placeholder="Description"></textarea>
+                    <textarea  asp-for="Description" class="form-control" rows="3" placeholder="Description"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
             </div>
 
@@ -70,13 +73,16 @@
                                 </td>
                                 <td>
                                     <input class="form-control" asp-for="ItemDtos[i].ItemName" name="ItemDtos[@i].ItemName" />
+                                    <span asp-validation-for="ItemDtos[i].ItemName" class="text-danger"></span>
                                 </td>
                                 <td>
                                     <input class="form-control" type="number" asp-for="ItemDtos[i].Qty" name="ItemDtos[@i].Qty" />
+                                    <span asp-validation-for="ItemDtos[i].Qty" class="text-danger"></span>
 
                                 </td>
                                 <td>
                                     <input class="form-control" asp-for="ItemDtos[i].Price" name="ItemDtos[@i].Price" />
+                                    <span asp-validation-for="ItemDtos[i].Price" class="text-danger"></span>
                                 </td>
                                 <td>
                                     <input class="form-control" value="@(Model.ItemDtos[i].Price*Model.ItemDtos[i].Qty)" disabled />
@@ -89,19 +95,29 @@
                 </table>
             </div>
 
-            <button class="btn btn-primary" type="submit" asp-action="AddInvoice">Save</button>
+            <button class="btn btn-primary" type="submit">Save</button>
 
         </form>
-        <form asp-action="DeleteInvoice" method="post">
-            <input asp-for="Id" hidden name="invoiceId" />
-            <button class="btn btn-danger" type="submit" asp-action="DeleteInvoice">Delete Invoice</button>
-        </form>
-        <form asp-action="DeleteInvoice" method="post">
-            <input asp-for="Id" hidden name="invoiceId" />
-            <button class="btn btn-success" type="submit" asp-action="NewInvoice">new Invoice</button>
-        </form>
+        <div class="container">
+            <div class="row">
+                <form class="col-md-4" asp-action="DeleteInvoice" method="post">
+                    <input asp-for="Id" hidden name="invoiceId" />
+                    <button class="btn btn-danger" type="submit" asp-action="DeleteInvoice">Delete Invoice</button>
+                </form>
+                <form class="col-md-4" asp-action="DeleteInvoice" method="post">
+                    <input asp-for="Id" hidden name="invoiceId" />
+                    <button class="btn btn-success" type="submit" asp-action="NewInvoice">new Invoice</button>
+                </form>
+            </div>
+        </div> 
+       
+    </div>
+    <div class="alert alert-warning alert-dismissible fade show" style="position:fixed;top:80%" role="alert">
+        <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 </div>
+
 @section scripts{
     <script type="text/javascript">
         $(document).ready(function () {
@@ -116,13 +132,15 @@
                                     </td>
                                     <td>
                                         <input class=form-control  name="ItemDtos[${i}].ItemName"  />
+                                                <span class="text-danger field-validation-valid" data-valmsg-for="ItemDtos[${i}].ItemName" data-valmsg-replace="true"></span>
                                     </td>
                                     <td>
                                         <input class=form-control type="number" name="ItemDtos[${i}].Qty" id="qty${i}" />
-
+                                                <span class="text-danger field-validation-valid" data-valmsg-for="ItemDtos[${i}].Qty" data-valmsg-replace="true"></span>
                                     </td>
                                     <td>
-                                                <input class=form-control  name="ItemDtos[${i}].Price" id="price${i}"/>
+                                        <input class=form-control  name="ItemDtos[${i}].Price" id="price${i}"/>
+                                        <span class="text-danger field-validation-valid" data-valmsg-for="ItemDtos[${i}].Price" data-valmsg-replace="true"></span>
                                     </td>
                                     <td>
                                         <input class=form-control disabled id="total${i}" />
@@ -135,10 +153,8 @@
                 let qty = parseFloat($("#qty" + (i - 1)).val());
                 $("#total" + parseInt(i - 1)).val(qty * price);
                 $('#cart').append(rowTable);
-                console.log(i, total, "#price" + i - 1);
 
             });
-
 
         });
     </script>

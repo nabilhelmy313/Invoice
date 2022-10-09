@@ -37,14 +37,26 @@ namespace InvoiceUi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddInvoice(InvoiceDto invoiceDto)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(InvoiceDto invoiceDto)
         {
-            var x = invoiceDto.ItemDtos.Sum(a => a.Price * a.Qty);
-            if (x > 10000 && invoiceDto.PaymentMethod == PaymentMethods.Credit.ToString())
-                return View("privacy", "total exceed 10,000 EGP");
-            var res = await _invoiceService.AddNewInovice(invoiceDto);
 
-            return RedirectToAction("index");
+            if (ModelState.IsValid)
+            {
+                var x = invoiceDto.ItemDtos.Sum(a => a.Price * a.Qty);
+                if (x > 10000 && invoiceDto.PaymentMethod == PaymentMethods.Credit.ToString())
+                    return View("privacy", "total exceed 10,000 EGP");
+                var res = await _invoiceService.AddNewInovice(invoiceDto);
+
+                return RedirectToAction("index");
+
+            }
+            return View(new InvoiceDto
+            {
+
+                InvoiceDate = DateTime.Now,
+                ItemDtos = new List<ItemDto>(),
+            });
         }
         [HttpPost]
         public IActionResult NewInvoice(int invoiceId)
